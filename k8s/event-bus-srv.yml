@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment   #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
+metadata:
+  name: event-bus  #nom du kind (actuelement nom du Deployement)
+  labels:
+    app: event-bus #label du Deployment
+spec:
+  replicas: 1 # nombre de replique du template
+  selector: # QUI :
+    matchLabels:
+      app: event-bus # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
+  template: # QUOI :
+    metadata:
+      labels:                       # QUOI/label 
+        app: event-bus             # label utilisé pour appelier le template deployé
+    spec:                           # QUOI / contenu
+      containers:
+      - name: event-bus             # nom du contenair
+        image: event-bus           # image utilisé (récupérer dans )
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 80         # port des pods utilisés
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  type: NodePort
+  selector:
+    app: event-bus
+  ports:
+    - protocol: TCP
+      port: 4005
+      targetPort: 80

@@ -105,3 +105,35 @@ Si vous modifiez ces ports, assurez-vous également de mettre à jour les réfé
     ```bash
     kubectl apply -f k8s/
     ```
+
+
+pour réalisé l'opération.
+# sur le terminal aller dans k8s :
+cd k8s
+
+# deployer le service client
+kubectl apply -f client-srv.yml
+kubectl apply -f event-bus-srv.yml
+kubectl apply -f moderation-srv.yml
+kubectl apply -f query-srv.yml
+kubectl apply -f comments-srv.yml
+
+# vérifier que le service est bien depoyé : 
+kubectl get deployments
+# la réponse doit montré :
+# NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+# client              1/1     1            1           (suivant le moment deployé)
+# comments            1/1     1            1           (suivant le moment deployé)
+# event-bus           1/1     1            1           (suivant le moment deployé)
+# moderation          1/1     1            1           (suivant le moment deployé)
+# posts               1/1     1            1           (suivant le moment deployé)
+# query               1/1     1            1           (suivant le moment deployé)
+
+# deployer le objet ingress
+kubectl apply -f ingress-srv.yml
+
+# vérifier que le service est bien depoyé : 
+kubectl get ingress
+# la réponse doit montré :
+#  NAME          CLASS    HOSTS                                       ADDRESS     PORTS   AGE
+#  ingress-srv   <none>   localhost,localhost,localhost + 2 more...   localhost   80      29h

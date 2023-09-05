@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment   #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
+metadata:
+  name: moderation  #nom du kind (actuelement nom du Deployement)
+  labels:
+    app: moderation #label du Deployment
+spec:
+  replicas: 1 # nombre de replique du template
+  selector: # QUI :
+    matchLabels:
+      app: moderation # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
+  template: # QUOI :
+    metadata:
+      labels:                       # QUOI/label 
+        app: moderation             # label utilisé pour appelier le template deployé
+    spec:                           # QUOI / contenu
+      containers:
+      - name: moderation             # nom du contenair
+        image: moderation           # image utilisé (récupérer dans )
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 80         # port des pods utilisés
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  type: NodePort
+  selector:
+    app: moderation
+  ports:
+    - protocol: TCP
+      port: 4003
+      targetPort: 80

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment   #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
+metadata:
+  name: comments  #nom du kind (actuelement nom du Deployement)
+  labels:
+    app: comments
+ #label du Deployment
+spec:
+  replicas: 1 # nombre de replique du template
+  selector: # QUI :
+    matchLabels:
+      app: comments
+   # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
+  template: # QUOI :
+    metadata:
+      labels:                       # QUOI/label 
+        app: comments
+                 # label utilisé pour appelier le template deployé
+    spec:                           # QUOI / contenu
+      containers:
+      - name: comments
+               # nom du contenair
+        image: comments
+               # image utilisé (récupérer dans )
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 80         # port des pods utilisés
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  type: NodePort
+  selector:
+    app: comments
+  ports:
+    - protocol: TCP
+      port: 4001
+      targetPort: 80

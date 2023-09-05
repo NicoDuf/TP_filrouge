@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: note
+    # nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  # ingressClassName : note
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/?(.*)"
+        backend:
+          service:
+            name: client-srv
+            port: 
+              number: 3000
+  - host: localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/posts/create"
+        backend:
+          service:
+            name: posts-clusterip-srv
+            port: 
+              number: 4000
+  - host: localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/posts"
+        backend:
+          service:
+            name: query-srv
+            port: 
+              number: 4002
+  - host: localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/posts/?(.*)/comments"
+        backend:
+          service:
+            name: comments-srv
+            port: 
+              number: 4001
