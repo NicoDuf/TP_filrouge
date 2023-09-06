@@ -106,36 +106,95 @@ Si vous modifiez ces ports, assurez-vous également de mettre à jour les réfé
     kubectl apply -f k8s/
     ```
 
-## Installation de l'application
+# Installation de l'application
 
-1. Construisez les images Docker pour chaque service :
-pour réalisé l'opération.
-# sur le terminal aller dans k8s :
-cd k8s
+  Phases : 
+    - preparation du dossier projet
+    - construction des images Docker
+    - deploiement des services sur kubernetes
+      > deploiement
+      > verification
+    - test
 
-# deployer le service client
-kubectl apply -f client-srv.yml
-kubectl apply -f event-bus-srv.yml
-kubectl apply -f moderation-srv.yml
-kubectl apply -f query-srv.yml
-kubectl apply -f comments-srv.yml
+   
+1. Preparer le projet dans un dossier git:
+   
+   installer le logiciel git si vous ne l'avez pas sur votre ordinateur (ci join la procédure : *https://learn.microsoft.com/fr-fr/devops/develop/git/install-and-set-up-git*)
+### Preparer le dossier 'Projet_1': ouvrir un  terminal 'power shell'et taper les commandes
+  ```bash
+  mkdir Projet_1
+  cd Projet_1
+  git clone https://github.com/NicoDuf/TP_filrouge.git
+  ```
+    votre systeme sera donc dans le dossier 'Projet_1'
+  
+  
+1. Construisez les images Docker pour chaque service de l'application:
+### sur le terminal construiser les images 'docker' par les commandes suivantes :
 
-# vérifier que le service est bien depoyé : 
+  ```bash
+  docker build -t query ./query
+  docker build -t client ./client
+  docker build -t moderation ./moderation
+  docker build -t comments ./comments
+  docker build -t event-bus ./event-bus
+  ```
+si vous souhaitez verifier vous lancer la commande ci dessous sur le terminal :
+  ```bash
+  docker images
+   ```
+  cela doit vous donner le resultat :
+|REPOSITORY  |   TAG   |
+|------------|---------|
+|query       |   latest|
+|posts       |   latest|
+|moderation  |   latest|
+|event-bus   |   latest|
+|comments    |   latest|
+|client      |   latest|
+
+
+### deployer le service client
+lancer la commande ci dessous sur le terminal :
+  ```bash
+  kubectl apply -f client-srv.yml
+  kubectl apply -f event-bus-srv.yml
+  kubectl apply -f moderation-srv.yml
+  kubectl apply -f query-srv.yml
+  kubectl apply -f comments-srv.yml
+  ```
+
+### vérifier que les services sont bien depoyés par la commande dans le terminal : 
+lancer la commande ci dessous sur le terminal :
+```bash
 kubectl get deployments
-# la réponse doit montré :
-# NAME                READY   UP-TO-DATE   AVAILABLE   AGE
-# client              1/1     1            1           (suivant le moment deployé)
-# comments            1/1     1            1           (suivant le moment deployé)
-# event-bus           1/1     1            1           (suivant le moment deployé)
-# moderation          1/1     1            1           (suivant le moment deployé)
-# posts               1/1     1            1           (suivant le moment deployé)
-# query               1/1     1            1           (suivant le moment deployé)
+```
+  
+  la réponse doit montré :
+|NAME       |   READY |  UP-TO-DATE |  AVAILABLE | AGE|
+|-------------|----------|----------|-----------|--------|
+|client     |   1/1  |   1     | 1 | (suivant le moment deployé)|
+|comments   |   1/1  |   1     | 1 | (suivant le moment deployé)|
+|event-bus  |   1/1  |   1     | 1 | (suivant le moment deployé)|
+|moderation |   1/1  |   1     | 1 | (suivant le moment deployé)|
+|posts      |   1/1  |   1     | 1 | (suivant le moment deployé)|
+|query      |   1/1  |   1     | 1 | (suivant le moment deployé)|
 
-# deployer le objet ingress
+### deployer l'objet ingress
+lancer la commande ci dessous sur le terminal :
+```bash
 kubectl apply -f ingress-srv.yml
+```
 
-# vérifier que le service est bien depoyé : 
+### vérifier que le deployement : 
+lancer la commande ci dessous sur le terminal :
+```bash
 kubectl get ingress
-# la réponse doit montré :
-#  NAME          CLASS    HOSTS                                       ADDRESS     PORTS   AGE
-#  ingress-srv   <none>   localhost,localhost,localhost + 2 more...   localhost   80      29h
+```
+ la réponse doit etre la suivante :
+
+| NAME        | CLASS  | HOSTS                                       | ADDRESS   |  PORTS  |
+|-------------|-------------|-------------|-------------|------------|
+| ingress-srv | <none> | localhost,localhost,localhost + 2 more...   | localhost |  80     |
+
+d'autres vérifications peuvent etre réalisé
