@@ -1,25 +1,25 @@
 apiVersion: apps/v1
-kind: Deployment   #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
+kind: Deployment                      #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
 metadata:
-  name: query  #nom du kind (actuelement nom du Deployement)
+  name: query                         #nom du kind (actuelement nom du Deployement)
   labels:
-    app: query #label du Deployment
+    app: query                        #label du Deployment
 spec:
-  replicas: 1 # nombre de replique du template
-  selector: # QUI :
+  replicas: 1                         # nombre de replique du template
+  selector:                           # QUI :
     matchLabels:
-      app: query # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
-  template: # QUOI :
+      app: query                      # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
+  template:                           # QUOI :
     metadata:
-      labels:                       # QUOI/label 
-        app: query             # label utilisé pour appelier le template deployé
-    spec:                           # QUOI / contenu
+      labels:                         # QUOI/label 
+        app: query                    # label utilisé pour appelier le template deployé
+    spec:                             # QUOI / contenu
       containers:
-      - name: query             # nom du contenair
-        image: query           # image utilisé (récupérer dans )
+      - name: query                   # nom du contenair
+        image: query                  # image utilisé (récupérer dans )
         imagePullPolicy : Never
         ports:
-        - containerPort: 80         # port des pods utilisés
+        - containerPort: 4002         # port des pods utilisés
 
 ---
 apiVersion: v1
@@ -33,4 +33,5 @@ spec:
   ports:
     - protocol: TCP
       port: 4002
-      targetPort: 80
+      targetPort: 4002
+      name : query-srv

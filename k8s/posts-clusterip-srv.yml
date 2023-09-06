@@ -19,7 +19,7 @@ spec:
         image: posts           # image utilisé (récupérer dans )
         imagePullPolicy : Never
         ports:
-        - containerPort: 80         # port des pods utilisés
+        - containerPort: 4000         # port des pods utilisés
 
 
 ---
@@ -34,4 +34,5 @@ spec:
   ports:
     - protocol: TCP
       port: 4000
-      targetPort: 80
+      targetPort: 4000
+      name : posts-clusterip-srv

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment   #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
+kind: Deployment                      #service demandé (deux possibilité : Deployement, Service, ConfigMap, Secret)
 metadata:
-  name: client  #nom du kind (actuelement nom du Deployement)
+  name: client                        #nom du kind (actuelement nom du Deployement)
   labels:
-    app: client #label du Deployment
+    app: client                      #label du Deployment
 spec:
-  replicas: 1 # nombre de replique du template
-  selector: # QUI :
+  replicas: 1                         # nombre de replique du template
+  selector:                           # QUI :
     matchLabels:
-      app: client # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
-  template: # QUOI :
+      app: client                     # appel du label du template utilisé (utilisé pour appeler ce kind (Deployment actuellement))
+  template:                           # QUOI :
     metadata:
       labels:                         # QUOI/label 
         app: client                   # label utilisé pour appelier le template deployé
@@ -19,7 +19,7 @@ spec:
         image: client                 # image utilisé (récupérer dans )
         imagePullPolicy : Never
         ports:
-        - containerPort: 80           # port des pods utilisés
+        - containerPort: 3000           # port des pods utilisés
 
 ---
 apiVersion: v1
@@ -33,4 +33,5 @@ spec:
   ports:
     - protocol: TCP
       port: 3000
-      targetPort: 80
+      targetPort: 3000
+      # name : client-service

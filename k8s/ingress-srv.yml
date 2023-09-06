@@ -3,10 +3,11 @@ kind: Ingress
 metadata:
   name: ingress-srv
   annotations:
-    kubernetes.io/ingress.class: note
-    # nginx.ingress.kubernetes.io/rewrite-target: "/"
+  #   kubernetes.io/ingress.class: nginx
+  #   nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
-  # ingressClassName : note
+  ingressClassName : nginx
   rules:
   - host: localhost
     http:

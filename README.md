@@ -106,7 +106,9 @@ Si vous modifiez ces ports, assurez-vous également de mettre à jour les réfé
     kubectl apply -f k8s/
     ```
 
+## Installation de l'application
 
+1. Construisez les images Docker pour chaque service :
 pour réalisé l'opération.
 # sur le terminal aller dans k8s :
 cd k8s

@@ -24,7 +24,7 @@ spec:
                # image utilisé (récupérer dans )
         imagePullPolicy : Never
         ports:
-        - containerPort: 80         # port des pods utilisés
+        - containerPort: 4001         # port des pods utilisés
 
 ---
 apiVersion: v1
@@ -38,4 +38,5 @@ spec:
   ports:
     - protocol: TCP
       port: 4001
-      targetPort: 80
+      targetPort: 4001
+      name: comments-srv
