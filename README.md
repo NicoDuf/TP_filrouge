@@ -6,15 +6,17 @@ Ce projet est une application microservices construite avec Node.js et React. Il
 
 ## Table des matières
 
-- [Introduction](#introduction)
-- [Table des matières](#table-des-matières)
-- [Architecture](#architecture)
-- [Chemins d'Ingress](#chemins-dingress)
-- [Noms de Services Kubernetes](#noms-de-services-kubernetes)
-- [Ports des Services](#ports-des-services)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Déploiement](#déploiement)
+- [Projet fil rouge](#projet-fil-rouge)
+  - [Introduction](#introduction)
+  - [Table des matières](#table-des-matières)
+  - [Architecture](#architecture)
+    - [Chemins d'Ingress](#chemins-dingress)
+    - [Noms de Services Kubernetes](#noms-de-services-kubernetes)
+    - [Ports des Services](#ports-des-services)
+  - [Prérequis](#prérequis)
+  - [Installation](#installation)
+  - [Déploiement](#déploiement)
+- [Installation de l'application](#installation-de-lapplication)
 
 ## Architecture
 
@@ -108,93 +110,104 @@ Si vous modifiez ces ports, assurez-vous également de mettre à jour les réfé
 
 # Installation de l'application
 
-  Phases : 
-    - preparation du dossier projet
-    - construction des images Docker
-    - deploiement des services sur kubernetes
-      > deploiement
-      > verification
-    - test
+**Phases :**
+  - *preparation du dossier projet*
+  - *construction des images Docker*
+  - *deploiement des services sur kubernetes*
+    - *deploiement des services*
+    - *deploiement de l'objet ingress*
+  - *test*
 
    
 1. Preparer le projet dans un dossier git:
    
-   installer le logiciel git si vous ne l'avez pas sur votre ordinateur (ci join la procédure : *https://learn.microsoft.com/fr-fr/devops/develop/git/install-and-set-up-git*)
-### Preparer le dossier 'Projet_1': ouvrir un  terminal 'power shell'et taper les commandes
-  ```bash
-  mkdir Projet_1
-  cd Projet_1
-  git clone https://github.com/NicoDuf/TP_filrouge.git
-  ```
+    installer le logiciel git si vous ne l'avez pas sur votre ordinateur (ci joint la procédure : *https://learn.microsoft.com/fr-fr/devops/develop/git/install-and-set-up-git* )
+
+    Preparer le dossier 'Projet_1': ouvrir un  terminal 'power shell'et taper les commandes
+    ```bash
+    mkdir Projet_1
+    cd Projet_1
+    git clone https://github.com/NicoDuf/TP_filrouge.git
+    ```
+
     votre systeme sera donc dans le dossier 'Projet_1'
   
+2. Construire les images Docker pour chaque service de l'application:
+
+    sur le terminal construiser les images 'docker' par les commandes suivantes :
+
+      ```bash
+      docker build -t query ./query
+      docker build -t client ./client
+      docker build -t moderation ./moderation
+      docker build -t comments ./comments
+      docker build -t event-bus ./event-bus
+      ```
+    si vous souhaitez verifier vous lancer la commande ci dessous sur le terminal :
+      ```bash
+      docker images
+      ```
+      cela doit vous donner le resultat :
+    |REPOSITORY  |   TAG   |
+    |------------|---------|
+    |query       |   latest|
+    |posts       |   latest|
+    |moderation  |   latest|
+    |event-bus   |   latest|
+    |comments    |   latest|
+    |client      |   latest|
+
+
+**3. deployer des services et ingress**
+
+*3.1 deployer des services*
   
-1. Construisez les images Docker pour chaque service de l'application:
-### sur le terminal construiser les images 'docker' par les commandes suivantes :
-
-  ```bash
-  docker build -t query ./query
-  docker build -t client ./client
-  docker build -t moderation ./moderation
-  docker build -t comments ./comments
-  docker build -t event-bus ./event-bus
-  ```
-si vous souhaitez verifier vous lancer la commande ci dessous sur le terminal :
-  ```bash
-  docker images
-   ```
-  cela doit vous donner le resultat :
-|REPOSITORY  |   TAG   |
-|------------|---------|
-|query       |   latest|
-|posts       |   latest|
-|moderation  |   latest|
-|event-bus   |   latest|
-|comments    |   latest|
-|client      |   latest|
-
-
-### deployer le service client
 lancer la commande ci dessous sur le terminal :
-  ```bash
-  kubectl apply -f client-srv.yml
-  kubectl apply -f event-bus-srv.yml
-  kubectl apply -f moderation-srv.yml
-  kubectl apply -f query-srv.yml
-  kubectl apply -f comments-srv.yml
-  ```
 
-### vérifier que les services sont bien depoyés par la commande dans le terminal : 
-lancer la commande ci dessous sur le terminal :
+```bash
+kubectl apply -f client-srv.yml
+kubectl apply -f event-bus-srv.yml
+kubectl apply -f moderation-srv.yml
+kubectl apply -f query-srv.yml
+kubectl apply -f comments-srv.yml
+```
+
+vérifiez que les services soient bien depoyés par la commande ci dessous (dans un terminal) :
 ```bash
 kubectl get deployments
 ```
   
-  la réponse doit montré :
-|NAME       |   READY |  UP-TO-DATE |  AVAILABLE | AGE|
-|-------------|----------|----------|-----------|--------|
-|client     |   1/1  |   1     | 1 | (suivant le moment deployé)|
-|comments   |   1/1  |   1     | 1 | (suivant le moment deployé)|
-|event-bus  |   1/1  |   1     | 1 | (suivant le moment deployé)|
-|moderation |   1/1  |   1     | 1 | (suivant le moment deployé)|
-|posts      |   1/1  |   1     | 1 | (suivant le moment deployé)|
-|query      |   1/1  |   1     | 1 | (suivant le moment deployé)|
+la réponse doit montré le bon deployement des 6 services :
+|NAME       | READY |UP-TO-DATE| AVAILABLE |   AGE            |
+|-----------|-------|----------|-----------|------------------|
+|client     | 1/1   |   1      | 1         | (svt deployement)|
+|comments   | 1/1   |   1      | 1         | (svt deployement)|
+|event-bus  | 1/1   |   1      | 1         | (svt deployement)|
+|moderation | 1/1   |   1      | 1         | (svt deployement)|
+|posts      | 1/1   |   1      | 1         | (svt deployement)|
+|query      | 1/1   |   1      | 1         | (svt deployement)|
 
-### deployer l'objet ingress
+*3.2 deployer l'objet ingress*
 lancer la commande ci dessous sur le terminal :
-```bash
-kubectl apply -f ingress-srv.yml
-```
+  ```bash
+  kubectl apply -f ingress-srv.yml
+  ```
 
-### vérifier que le deployement : 
-lancer la commande ci dessous sur le terminal :
-```bash
-kubectl get ingress
-```
- la réponse doit etre la suivante :
+  **vérifier le deployement :**
 
-| NAME        | CLASS  | HOSTS                                       | ADDRESS   |  PORTS  |
-|-------------|-------------|-------------|-------------|------------|
-| ingress-srv | <none> | localhost,localhost,localhost + 2 more...   | localhost |  80     |
+  lancer la commande ci dessous sur le terminal :
 
-d'autres vérifications peuvent etre réalisé
+  ```bash
+  kubectl get ingress
+  ```
+  la réponse doit etre la suivante :
+
+
+  |NAME       |CLASS| HOSTS     | ADDRESS   |  PORTS  |
+  |-----------|-----|-----------|-----------|---------|
+  |ingress-srv|     | localhost,localhost,localhost + 2 more...   | localhost |  80     |
+
+vous trouverez les tutoriels des application utilisés dans la liste suivante :
+
+- **kubernetes :** https://kubernetes.io/fr/docs/tutorials/
+- **docker :**https://docs.docker.com/
